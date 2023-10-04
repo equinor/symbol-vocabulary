@@ -1,0 +1,23 @@
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix ex:   <http://example.com#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix imf:  <http://ns.imfid.org/imf#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix pav:  <http://purl.org/pav/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix vs:   <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix sym:  <http://example.equinor.com/symbol#> .
+ex:pump a imf:Block , ex:ExampleBlock ;
+  imf:hasTerminal ex:pump_terminal ;
+  imf:symbol ex:cl-symbol-123456789 . # IRI issued by common lib for symbol
+
+ex:pump_terminal a imf:Terminal , ex:ExampleTerminal ;
+    imf:symbol 
+      [ dc:identifier "1" ; sym:isPointOn ex:cl-symbol-123456789 ] # this blank node represents the symbol's connection point
+.

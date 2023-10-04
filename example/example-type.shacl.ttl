@@ -1,0 +1,60 @@
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix ex:   <http://example.com#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix imf:  <http://ns.imfid.org/imf#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix pav:  <http://purl.org/pav/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix vs:   <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix sym:  <http://example.equinor.com/symbol#> .
+ex:ExampleBlock
+    a imf:BlockType, sh:NodeShape , rdfs:Class ;
+    rdfs:subClassOf imf:Block ;
+
+    ## The following statement requires all instances of
+    ## ex:ExampleBlock to have the symbol with the identifier
+    ## ex:cl-symbol-123456789:
+    sh:property [
+        sh:path imf:symbol ;
+        sh:hasValue ex:cl-symbol-111
+    ] ;
+
+    ## The following statement requires that the terminals of
+    ## ex:ExampleBlock (have symbols that) are connectionPoints on
+    ## ex:cl-symbol-123456789:
+    sh:property [
+        sh:path ( imf:hasTerminal imf:symbol sym:isPointOn ) ;
+        sh:hasValue ex:cl-symbol-222
+    ]
+.
+
+ex:ExampleTerminal
+    a imf:TerminalType, sh:NodeShape , rdfs:Class ;
+    rdfs:subClassOf imf:Terminal ;
+
+    ## The following statement requires all instances of
+    ## ex:ExampleTerminal to have (the symbol which is) a
+    ## connectionPoint on the ex:cl-symbol-123456789:
+    sh:property [
+        sh:path ( imf:symbol sym:isPointOn ) ;
+        sh:hasValue ex:cl-symbol-333
+    ] ;
+
+    ## The following statement requires all instances of
+    ## ex:ExampleTerminal to have (the symbol which is) a
+    ## connectionPoint with the identifier 1 on the
+    ## ex:cl-symbol-123456789:
+    sh:property [
+        sh:path imf:symbol ;
+	sh:node [
+	  sh:property 
+            [ sh:path sym:isPointOn ; sh:hasValue ex:cl-symbol-444 ] ,
+            [ sh:path dc:identifier ; sh:hasValue 1 ]
+          ]
+    ] .
