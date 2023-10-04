@@ -1,0 +1,7 @@
+* Symbol ontology
+
+Contents:
+ - [./schema] contains schema such as: vocabularies, ontologies, json ld contexts
+ - [./example] contains examples of the above
+ - [./pages] contains files that are published on the public Internet.
+
