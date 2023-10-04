@@ -1,6 +1,6 @@
 PWD = $(shell pwd)
 
-.tangle: README.org
+.tangle: source.org
 	emacs --batch --quick -l org -l ${HOME}/.emacs --eval "(org-babel-tangle-file \"$<\")"
 	touch $@
 
@@ -19,3 +19,9 @@ PWD = $(shell pwd)
 all: \
 	example/example-symbol.json \
 	schema/symbol.owl+shacl.html
+
+pages: all
+	mkdir -p $@
+	cp -u schema/symbol.owl+shacl.html $@/index.html
+	cp -u schema/symbol.owl+shacl.ttl $@
+	cp -u schema/symbol-context.json $@
