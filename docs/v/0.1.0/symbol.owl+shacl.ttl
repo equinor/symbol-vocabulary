@@ -11,6 +11,7 @@
 @prefix vann: <http://purl.org/vocab/vann/> .
 @prefix vs:   <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
 
 @prefix sym:  <http://example.equinor.com/symbol#> .
 
@@ -21,17 +22,22 @@ sym:SymbolOntology a owl:Ontology ;
     #TODO vann:preferredNamespaceUri
     #owl:priorVersion 
     #owl:versionIRI 
-    owl:versionInfo "0.1.0-SNAPSHOT" ;
+    owl:versionInfo "0.1.0" ;
     # doap:repository
 
     dc:creator "Martin G. Skjæveland" ;
     dc:contributor "Arne Måge", "Lorentz Fjellanger Barstad" ;
 
     dc:created "2023-09-19" ;
-    #dc:issued "2023-09-19"^^xsd:dateTime ;
+    dc:issued "2023-10-23" ;
     dc:modified "2023-09-26" ;
 
     dc:abstract "The Symbol Ontology is designed to be used for representing typically standardized engineering symbols that are used in technical drawings, diagrams, schematics, and blueprints, as well as for documentation and communication in engineering disciplines such as mechanical, electrical, civil, and chemical engineering." ;
+    dcat:distribution 
+       [ dc:format <https://www.iana.org/assignments/media-types/text/turtle> ;
+         dcat:downloadURL <https://equinor.github.io/symbol-vocabulary/v/0.1.0/symbol.owl+shacl.ttl> ] ,
+       [ dc:format <https://www.iana.org/assignments/media-types/application/ld+json> ;
+         dcat:downloadURL <https://equinor.github.io/symbol-vocabulary/v/0.1.0/symbol-context.json> ] 
     #dc:description "" ;
     #skos:changeNote    
 .
