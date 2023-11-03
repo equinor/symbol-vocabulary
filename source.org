@@ -495,20 +495,42 @@ ex:ExampleBlock
     a imf:BlockType, sh:NodeShape , rdfs:Class ;
     rdfs:subClassOf imf:Block ;
 
-    ## The following statement requires all instances of
+    ## 1 The following statement requires all instances of
     ## ex:ExampleBlock to have the symbol with the identifier
-    ## ex:cl-symbol-123456789:
+    ## ex:cl-symbol-111:
     sh:property [
         sh:path imf:symbol ;
         sh:hasValue ex:cl-symbol-111
     ] ;
 
-    ## The following statement requires that the terminals of
+    ## 2 The following statement requires that the terminals of
     ## ex:ExampleBlock (have symbols that) are connectionPoints on
-    ## ex:cl-symbol-123456789:
+    ## ex:cl-symbol-222:
     sh:property [
         sh:path ( imf:hasTerminal imf:symbol sym:isPointOn ) ;
         sh:hasValue ex:cl-symbol-222
+    ] ;
+
+    ## 3 The following statement requires that there is exactly one
+    ## terminal of type ex:ExampleTerminal that has (the symbol which
+    ## is) a connectionPoint with the identifier 1 on the
+    ## ex:cl-symbol-333:
+
+    sh:property [ 
+      sh:path imf:hasTerminal ; 
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+      sh:node ex:ExampleTerminal ; ### NB! if two sh:node's are not legal, use sh:and.
+      sh:node [ 
+        sh:property [ 
+          sh:path imf:symbol ;
+          sh:node [ 
+            sh:property 
+              [ sh:path sym:isPointOn ; sh:hasValue ex:cl-symbol-333 ] ,
+              [ sh:path dc:identifier ; sh:hasValue 1 ]
+          ]
+        ]
+      ]
     ]
 .
 
@@ -516,18 +538,18 @@ ex:ExampleTerminal
     a imf:TerminalType, sh:NodeShape , rdfs:Class ;
     rdfs:subClassOf imf:Terminal ;
 
-    ## The following statement requires all instances of
+    ## 1 The following statement requires all instances of
     ## ex:ExampleTerminal to have (the symbol which is) a
-    ## connectionPoint on the ex:cl-symbol-123456789:
+    ## connectionPoint on the ex:cl-symbol-111:
     sh:property [
         sh:path ( imf:symbol sym:isPointOn ) ;
-        sh:hasValue ex:cl-symbol-333
+        sh:hasValue ex:cl-symbol-111
     ] ;
 
-    ## The following statement requires all instances of
+    ## 2 The following statement requires all instances of
     ## ex:ExampleTerminal to have (the symbol which is) a
     ## connectionPoint with the identifier 1 on the
-    ## ex:cl-symbol-123456789:
+    ## ex:cl-symbol-444:
     sh:property [
         sh:path imf:symbol ;
 	sh:node [
@@ -648,19 +670,19 @@ done
 #+begin_example
 example/example-block.ttl
 rapper: Parsing URI file:///home/martige/repo/equinor/symbol-vocabulary/example/example-block.ttl with parser turtle
-rapper: Parsing returned 9 triples
+rapper: Parsing returned 18 triples
 ---------------------
 example/example-symbol.ttl
 rapper: Parsing URI file:///home/martige/repo/equinor/symbol-vocabulary/example/example-symbol.ttl with parser turtle
 rapper: Parsing returned 27 triples
 ---------------------
-example/example-type.ttl
-rapper: Parsing URI file:///home/martige/repo/equinor/symbol-vocabulary/example/example-type.ttl with parser turtle
-rapper: Parsing returned 36 triples
+example/example-type.shacl.ttl
+rapper: Parsing URI file:///home/martige/repo/equinor/symbol-vocabulary/example/example-type.shacl.ttl with parser turtle
+rapper: Parsing returned 49 triples
 ---------------------
 schema/symbol.owl+shacl.ttl
 rapper: Parsing URI file:///home/martige/repo/equinor/symbol-vocabulary/schema/symbol.owl+shacl.ttl with parser turtle
-rapper: Parsing returned 262 triples
+rapper: Parsing returned 263 triples
 ---------------------
 #+end_example
 
@@ -736,37 +758,17 @@ Validating RDF data <schema/symbol.owl+shacl.ttl> against SHACL shape <schema/sy
 
 #+RESULTS:
 #+BEGIN_src ttl
-Validating RDF data <example/example-type.ttl> against SHACL shape <http://shipshape.dyreriket.xyz/std-vocabulary-elements.ttl>:
-@prefix dc:      <http://purl.org/dc/terms/> .
-@prefix ex:      <http://example.com#> .
-@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
-@prefix imf:     <http://ns.imfid.org/imf#> .
-@prefix owl:     <http://www.w3.org/2002/07/owl#> .
-@prefix pav:     <http://purl.org/pav/> .
-@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix sh:      <http://www.w3.org/ns/shacl#> .
-@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
-@prefix sss:     <http://shipshape.dyreriket.xyz#> .
-@prefix sss-sve: <http://shipshape.dyreriket.xyz/std-vocabulary-elements#> .
-@prefix sym:     <http://example.equinor.com/symbol#> .
-@prefix vann:    <http://purl.org/vocab/vann/> .
-@prefix vs:      <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
-@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+Validating RDF data <example/example-type.shacl.ttl> against SHACL shape <http://shipshape.dyreriket.xyz/std-vocabulary-elements.ttl>:
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
 [ rdf:type     sh:ValidationReport ;
-  sh:conforms  false ;
-  sh:result    [ rdf:type                      sh:ValidationResult ;
-                 sh:focusNode                  sss:ANY_NODE ;
-                 sh:resultMessage              "Unrecognised SKOS vocabulary element. Check spelling." ;
-                 sh:resultSeverity             sh:Violation ;
-                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
-                 sh:sourceShape                sss-sve:SKOSVocabularyShape ;
-                 sh:value                      imf:symbol
-               ]
+  sh:conforms  true
 ] .
 
-Validating RDF data <example/example-type.ttl> against SHACL shape <http://www.w3.org/ns/shacl-shacl#>:
+Validating RDF data <example/example-type.shacl.ttl> against SHACL shape <http://www.w3.org/ns/shacl-shacl#>:
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sh:   <http://www.w3.org/ns/shacl#> .
@@ -777,6 +779,30 @@ Validating RDF data <example/example-type.ttl> against SHACL shape <http://www.w
 ] .
 
 #+END_src
+
+#+RESULTS:
+#+begin_example
+Validating RDF data <example/example-type.shacl.ttl> against SHACL shape <http://shipshape.dyreriket.xyz/std-vocabulary-elements.ttl>:
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+[ rdf:type     sh:ValidationReport ;
+  sh:conforms  true
+] .
+
+Validating RDF data <example/example-type.shacl.ttl> against SHACL shape <http://www.w3.org/ns/shacl-shacl#>:
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+[ rdf:type     sh:ValidationReport ;
+  sh:conforms  true
+] .
+#+end_example
+
 *** example-symbol.ttl
 
 #+CALL: sh_jena_shacl_validate(shapes="http://shipshape.dyreriket.xyz/std-vocabulary-elements.ttl", data="example/example-block.ttl")

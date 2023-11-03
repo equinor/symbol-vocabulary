@@ -11,26 +11,49 @@
 @prefix vann: <http://purl.org/vocab/vann/> .
 @prefix vs:   <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
 
 @prefix sym:  <http://example.equinor.com/symbol#> .
 ex:ExampleBlock
     a imf:BlockType, sh:NodeShape , rdfs:Class ;
     rdfs:subClassOf imf:Block ;
 
-    ## The following statement requires all instances of
+    ## 1 The following statement requires all instances of
     ## ex:ExampleBlock to have the symbol with the identifier
-    ## ex:cl-symbol-123456789:
+    ## ex:cl-symbol-111:
     sh:property [
         sh:path imf:symbol ;
         sh:hasValue ex:cl-symbol-111
     ] ;
 
-    ## The following statement requires that the terminals of
+    ## 2 The following statement requires that the terminals of
     ## ex:ExampleBlock (have symbols that) are connectionPoints on
-    ## ex:cl-symbol-123456789:
+    ## ex:cl-symbol-222:
     sh:property [
         sh:path ( imf:hasTerminal imf:symbol sym:isPointOn ) ;
         sh:hasValue ex:cl-symbol-222
+    ] ;
+
+    ## 3 The following statement requires that there is exactly one
+    ## terminal of type ex:ExampleTerminal that has (the symbol which
+    ## is) a connectionPoint with the identifier 1 on the
+    ## ex:cl-symbol-333:
+
+    sh:property [ 
+      sh:path imf:hasTerminal ; 
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+      sh:node ex:ExampleTerminal ; ### NB! if two sh:node's are not legal, use sh:and.
+      sh:node [ 
+        sh:property [ 
+          sh:path imf:symbol ;
+          sh:node [ 
+            sh:property 
+              [ sh:path sym:isPointOn ; sh:hasValue ex:cl-symbol-333 ] ,
+              [ sh:path dc:identifier ; sh:hasValue 1 ]
+          ]
+        ]
+      ]
     ]
 .
 
@@ -38,18 +61,18 @@ ex:ExampleTerminal
     a imf:TerminalType, sh:NodeShape , rdfs:Class ;
     rdfs:subClassOf imf:Terminal ;
 
-    ## The following statement requires all instances of
+    ## 1 The following statement requires all instances of
     ## ex:ExampleTerminal to have (the symbol which is) a
-    ## connectionPoint on the ex:cl-symbol-123456789:
+    ## connectionPoint on the ex:cl-symbol-111:
     sh:property [
         sh:path ( imf:symbol sym:isPointOn ) ;
-        sh:hasValue ex:cl-symbol-333
+        sh:hasValue ex:cl-symbol-111
     ] ;
 
-    ## The following statement requires all instances of
+    ## 2 The following statement requires all instances of
     ## ex:ExampleTerminal to have (the symbol which is) a
     ## connectionPoint with the identifier 1 on the
-    ## ex:cl-symbol-123456789:
+    ## ex:cl-symbol-444:
     sh:property [
         sh:path imf:symbol ;
 	sh:node [
